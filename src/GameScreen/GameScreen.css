@@ -1,0 +1,192 @@
+/* ======================== */
+/* 1. ANIMACIÓN Y CONTENEDOR (COPIADO DE ImpostorGame.css) */
+/* ======================== */
+
+/* Importante para resetear margenes y padding */
+* {
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0;
+}
+
+/* Definición de la animación de movimiento de fondo */
+@keyframes color-movement {
+  0% { background-position: 0% 50%; } 
+  50% { background-position: 100% 50%; } 
+  100% { background-position: 0% 50%; } 
+}
+
+/* Contenedor Principal: Aplica el fondo animado */
+.lobby-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    /* justify-content: center; <-- Se remueve para que el contenido se apile desde arriba */
+    padding-top: 50px; /* Espacio superior para el título */
+    text-align: center;
+    min-height: 100vh; /* Se asegura de ocupar toda la altura */
+    height: 100%;
+    
+    background: linear-gradient(-45deg, #FF6B6B, #FFD166, #6BFFB8, #66B2FF);
+    background-size: 400% 400%; 
+    animation: color-movement 15s ease infinite; 
+    color: #fff; 
+    
+    overflow-x: hidden;
+}
+
+/* ======================== */
+/* 2. ESTILOS DE TEXTO (COPIADO/ADAPTADO) */
+/* ======================== */
+
+.lobby-title {
+    font-size: 3em; 
+    font-weight: 800; 
+    margin-bottom: 0.5em;
+    color: #fff; 
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.6); 
+    padding: 0 10px; 
+}
+
+.lobby-message {
+    font-size: 1.2em; 
+    font-weight: 400;
+    margin-bottom: 2em; 
+    color: #EEE; 
+    padding: 0 10px;
+}
+
+/* ======================== */
+/* 3. LISTA DE JUGADORES */
+/* ======================== */
+
+.players-list-wrapper {
+    width: 90%;
+    max-width: 400px; /* Limita el ancho en pantallas grandes */
+    background: rgba(255, 255, 255, 0.2); /* Fondo semitransparente para destacar */
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: auto; /* IMPORTANTE: Empuja los botones a la parte inferior */
+}
+
+.players-list {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+.player-item {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #fff;
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s;
+}
+
+.player-item:last-child {
+    border-bottom: none;
+}
+
+.player-icon {
+    margin-right: 10px;
+}
+
+/* ======================== */
+/* 4. BOTONES INFERIORES */
+/* ======================== */
+
+.lobby-actions {
+    width: 90%;
+    max-width: 400px;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column; /* Apila los botones en móviles */
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.start-button, .end-button {
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.start-button {
+    background-color: #6BFFB8; /* Color de acción positiva (Comenzar) */
+    color: #111;
+}
+
+.start-button:hover:not(:disabled) {
+    background-color: #4cd89c;
+}
+
+.start-button.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.end-button {
+    background-color: #FF6B6B; /* Color de acción negativa (Finalizar) */
+    color: #fff;
+}
+
+.end-button:hover {
+    background-color: #d85757;
+}
+
+/* ======================== */
+/* MEDIA QUERY: ESCRITORIO */
+/* ======================== */
+@media (min-width: 768px) {
+    .lobby-title {
+        font-size: 4em;
+    }
+    .lobby-actions {
+        flex-direction: row; /* En escritorio, pónlos lado a lado */
+        justify-content: space-between;
+    }
+    .start-button, .end-button {
+        width: 48%; /* Para que ocupen casi la mitad cada uno */
+    }
+}
+
+.player-item {
+    /* ... estilos existentes ... */
+    display: flex;
+    justify-content: space-between; /* Espacio entre el nombre y el botón X */
+    align-items: center;
+}
+
+/* Botón de eliminación (solo visible para Admin) */
+.remove-button {
+    background: rgba(255, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.remove-button:hover {
+    background: red;
+}
+
+/* Mensaje para jugadores no administradores */
+.waiting-admin-message {
+    font-size: 1.1em;
+    font-style: italic;
+    color: #fff;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    width: 100%;
+}

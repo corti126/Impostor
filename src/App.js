@@ -1,12 +1,16 @@
-import './firebaseConfig'; 
+// Ubicación: src/App.js
 
-import './App.css';
+import React from 'react';
+import './App.css'; 
+import { ImpostorGame } from './ImpostorGame/ImpostorGame';
+import { GameProvider } from './GameContext/GameContext'; // 🚨 Importa el proveedor
 
 function App() {
   return (
-      <div>
-        <h1>Holaaaa</h1>
-      </div>
+    // 🚨 Envolvemos el componente principal con el Proveedor de Contexto
+    <GameProvider>
+      <ImpostorGame />
+    </GameProvider>
   );
 }
 

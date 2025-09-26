@@ -1,0 +1,118 @@
+* {
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0;
+}
+
+@keyframes color-movement {
+  0% { background-position: 0% 50%; } 
+  50% { background-position: 100% 50%; } 
+  100% { background-position: 0% 50%; } 
+}
+
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center; 
+  text-align: center;
+  height: 100vh; 
+  
+  background: linear-gradient(-45deg, #FF6B6B, #FFD166, #6BFFB8, #66B2FF);
+  background-size: 400% 400%; 
+  animation: color-movement 15s ease infinite; 
+  color: #fff; 
+  
+  overflow-x: hidden;
+}
+
+.welcome-title {
+  font-size: 3em; 
+  font-weight: 800; 
+  margin-bottom: 0.2em;
+  color: #fff; 
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.6); 
+  padding: 0 10px; 
+}
+
+.selection-message {
+  font-size: 1.2em; 
+  font-weight: 400;
+  margin-bottom: 2em; 
+  color: #EEE; 
+  padding: 0 10px;
+}
+
+.game-modes-wrapper {
+  display: flex;
+  gap: 30px; 
+  max-width: 100%;
+}
+
+.game-mode-card {
+  width: 150px; 
+  height: 150px; 
+  border: 4px solid #fff;
+  border-radius: 15px; 
+  cursor: pointer; 
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.9); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px; 
+}
+
+.game-mode-card:hover,
+.game-mode-card:focus {
+  transform: none; 
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
+  border-color: #fff;
+}
+
+.clash-royale:hover,
+.clash-royale:focus {
+  transform: scale(1.05); 
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); 
+  border-color: #FF6B6B; 
+  outline: none; 
+}
+
+.game-mode-card.futbol {
+    /* Eliminamos el borde */
+    border: 4px solid transparent;
+    background-color: rgba(180, 180, 180, 0.7); 
+    cursor: default; 
+    pointer-events: none; 
+    opacity: 0.6; 
+}
+
+.game-mode-card.futbol:hover,
+.game-mode-card.futbol:focus {
+    transform: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-color: transparent;
+}
+
+.game-mode-image {
+  max-width: 100%; 
+  max-height: 100%; 
+  object-fit: contain; 
+}
+
+@media (min-width: 768px) {
+    .welcome-title {
+        font-size: 4em;
+    }
+    .selection-message {
+        font-size: 1.5em;
+    }
+    .game-modes-wrapper {
+        gap: 60px;
+    }
+    .game-mode-card {
+        width: 200px;
+        height: 200px;
+    }
+}
