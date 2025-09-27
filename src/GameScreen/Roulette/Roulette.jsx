@@ -1,6 +1,13 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import './Roulette.css';
 
+const CloseIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="feather feather-x">
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+);
+
 const getColor = (name, index) => {
   const colors = [
     '#00BFA5', '#1976D2', '#D81B60', '#FFB300',
@@ -9,11 +16,13 @@ const getColor = (name, index) => {
   return colors[index % colors.length];
 };
 
-export const Roulette = ({ players, gameStatus }) => {
+export const Roulette = ({ players, gameStatus, onClose }) => {
   const { isRouletteActive, playerToStart } = gameStatus;
 
   const canvasRef = useRef(null);
   const [hasStartedSpinning, setHasStartedSpinning] = useState(false);
+
+  const [winnerDisplayed, setWinnerDisplayed] = useState(false);
 
   const dibujarRuleta = useCallback((currentAngle = 0) => {
     const canvas = canvasRef.current;
@@ -83,6 +92,8 @@ export const Roulette = ({ players, gameStatus }) => {
 
         dibujarRuleta(finalAngle);
 
+        setWinnerDisplayed(true);
+
         return;
       }
 
@@ -105,6 +116,7 @@ export const Roulette = ({ players, gameStatus }) => {
   useEffect(() => {
     if (isRouletteActive && !hasStartedSpinning) {
       setHasStartedSpinning(true);
+      setWinnerDisplayed(false);
       girar();
     }
 
@@ -114,15 +126,43 @@ export const Roulette = ({ players, gameStatus }) => {
     }
   }, [isRouletteActive, girar, hasStartedSpinning]);
 
-  if (!isRouletteActive && !playerToStart) return null;
 
-  const showWinner = !isRouletteActive && playerToStart;
+  useEffect(() => {
+    let timerClose;
+    let timerCountdown;
+
+    if (winnerDisplayed && typeof onClose === 'function') {
+      timerClose = setTimeout(() => {
+        onClose();
+        clearInterval(timerCountdown);
+      }, 3000);
+
+      return () => {
+        clearTimeout(timerClose);
+        clearInterval(timerCountdown);
+      };
+    }
+    return () => {
+      clearTimeout(timerClose);
+      clearInterval(timerCountdown);
+    };
+  }, [winnerDisplayed, onClose]);
+
+  if (!isRouletteActive) return null;
+
+  const showWinner = winnerDisplayed && playerToStart;
 
   return (
     <div className="roulette-modal-overlay">
       <div className="roulette-modal-content">
+        {showWinner && typeof onClose === 'function' && (
+          <button className="roulette-close-button" onClick={onClose}>
+            <CloseIcon />
+          </button>
+        )}
+
         <h1 className="roulette-main-title">
-          {showWinner ? '¡DUELO INICIADO!' : 'GIRANDO LA RULETA'}
+          {showWinner ? '¡EMPIEZA...!' : 'GIRANDO...'}
         </h1>
 
         <div className="ruleta-wrapper">
@@ -145,7 +185,7 @@ export const Roulette = ({ players, gameStatus }) => {
 
         {showWinner && (
           <p className="roulette-instruction">
-            ¡**{playerToStart.toUpperCase()}** comienza la primera ronda de apuestas de Elixir!
+            ¡**{playerToStart.toUpperCase()}** comienza la ronda.
           </p>
         )}
       </div>

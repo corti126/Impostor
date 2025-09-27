@@ -1,20 +1,18 @@
-/* Estilos para oscurecer el fondo */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.75); /* Fondo semitransparente oscuro */
+    background-color: rgba(0, 0, 0, 0.75);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Asegura que esté por encima de todo */
+    z-index: 1000;
 }
 
-/* Estilos para la caja del modal */
 .modal-content {
-    background: #fff;
+    background: #1b1c1d;
     padding: 30px 20px;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
@@ -30,17 +28,16 @@
 }
 
 .modal-title {
-    color: #333;
+    color: #fff;
     font-size: 1.8em;
     margin-bottom: 10px;
 }
 
 .modal-message {
-    color: #666;
+    color: #ddd;
     margin-bottom: 20px;
 }
 
-/* Estilos para el campo de entrada */
 .username-input {
     width: 90%;
     padding: 12px;
@@ -53,16 +50,14 @@
 }
 
 .username-input:focus {
-    border-color: #FF6B6B; /* Color del tema */
+    border-color: #FF6B6B;
 }
 
-/* Contenedor de botones */
 .modal-actions {
     display: flex;
     justify-content: space-around;
 }
 
-/* Estilos de botones */
 .confirm-button, .cancel-button {
     padding: 10px 20px;
     border: none;
@@ -74,7 +69,7 @@
 }
 
 .confirm-button {
-    background-color: #6BFFB8; /* Color verde/aceptar */
+    background-color: #6BFFB8;
     color: #000;
 }
 
@@ -88,7 +83,7 @@
 }
 
 .cancel-button {
-    background-color: #FF6B6B; /* Color rojo/cancelar */
+    background-color: #FF6B6B;
     color: #fff;
 }
 

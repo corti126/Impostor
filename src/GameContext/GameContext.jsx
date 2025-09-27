@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { database } from '../firebaseConfig';
 import { CLASH_ROYALE_CARDS } from '../constants/cards';
 
@@ -160,11 +160,11 @@ export const GameProvider = ({ children }) => {
 
   const startGame = async () => {
     if (players.length < 1) {
-      alert("Se requieren al menos 2 jugadores para comenzar la partida.");
+      console.log("Se requieren al menos 2 jugadores para comenzar la partida.");
       return false;
     }
     if (players.length > CLASH_ROYALE_CARDS.length) {
-      alert(`No hay suficientes cartas únicas (${CLASH_ROYALE_CARDS.length}) para los ${players.length} jugadores.`);
+      console.log(`No hay suficientes cartas únicas (${CLASH_ROYALE_CARDS.length}) para los ${players.length} jugadores.`);
       return false;
     }
 
@@ -188,14 +188,14 @@ export const GameProvider = ({ children }) => {
     try {
       await update(ref(database, LOBBY_PATH), {
         status: newGameStatus,
-        players: updatedPlayersObject 
+        players: updatedPlayersObject
       });
 
       console.log(`Partida iniciada. Impostor asignado: ${impostorName}`);
       return true;
     } catch (e) {
       console.error("Error al iniciar la partida:", e);
-      alert("No se pudo iniciar la partida. Inténtalo de nuevo.");
+      console.log("No se pudo iniciar la partida. Inténtalo de nuevo.");
       return false;
     }
   };
@@ -214,12 +214,6 @@ export const GameProvider = ({ children }) => {
     try {
       await update(gameStatusRef, rouletteUpdate);
 
-      setTimeout(async () => {
-        await update(gameStatusRef, {
-          isRouletteActive: false,
-        });
-      }, 4500);
-
       return true;
     } catch (e) {
       console.error("Error al iniciar la ruleta:", e);
@@ -227,9 +221,20 @@ export const GameProvider = ({ children }) => {
     }
   };
 
+  const updateGameStatus = async (newStatus) => {
+    try {
+      await update(gameStatusRef, newStatus);
+      return true;
+    } catch (e) {
+      console.error("Error al actualizar el estado del juego:", e);
+      return false;
+    }
+  };
+
+
   const joinLobby = async (name) => {
     if (gameStatus.isGameStarted) {
-      alert("La partida ya ha comenzado. Espera a que el administrador la finalice.");
+      console.log("La partida ya ha comenzado. Espera a que el administrador la finalice.");
       return false;
     }
 
@@ -238,7 +243,7 @@ export const GameProvider = ({ children }) => {
     const existingPlayer = players.find(p => p.name.toLowerCase() === name.toLowerCase());
 
     if (existingPlayer) {
-      alert(`El nombre '${name}' ya está en uso por otro jugador. Por favor, sé más específico.`);
+      console.log(`El nombre '${name}' ya está en uso por otro jugador. Por favor, sé más específico.`);
       return false;
     }
 
@@ -282,6 +287,33 @@ export const GameProvider = ({ children }) => {
     }
   };
 
+  const resetGame = async () => {
+    if (!isAdmin) return;
+
+    const resetGameStatus = {
+      isGameStarted: false,
+      impostorName: null,
+      isRouletteActive: false,
+      playerToStart: null,
+    };
+
+    try {
+      await update(gameStatusRef, resetGameStatus);
+
+      const updates = {};
+      players.forEach(player => {
+        updates[`players/${player.id}/assignedCard`] = null;
+      });
+      await update(ref(database, LOBBY_PATH), updates);
+
+      console.log("Partida reseteada. Jugadores en lobby.");
+    } catch (e) {
+      console.error("Error al resetear la partida: ", e);
+      console.log("No se pudo resetear la partida. Inténtalo de nuevo.");
+    }
+  };
+
+
   const contextValue = {
     userName,
     players,
@@ -296,6 +328,8 @@ export const GameProvider = ({ children }) => {
     startRoulette,
     removePlayer: leaveLobby,
     setCurrentScreen,
+    resetGame,
+    updateGameStatus,
   };
 
   return (

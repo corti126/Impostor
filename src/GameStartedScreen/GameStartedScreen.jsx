@@ -5,7 +5,7 @@ import { CardModal } from '../GameScreen/CardModal/CardModal';
 import { Roulette } from '../GameScreen/Roulette/Roulette';
 
 const GameStartedScreen = () => {
-  const { userName, gameStatus, players, finishGame, isAdmin, startRoulette } = useGame();
+  const { userName, gameStatus, players, finishGame, isAdmin, startRoulette, resetGame, updateGameStatus } = useGame();
 
   const [isCardModalOpen, setIsCardModalOpen] = useState(true);
 
@@ -22,6 +22,21 @@ const GameStartedScreen = () => {
       ? 'Gira la ruleta para saber quién empieza.'
       : 'Esperando que el administrador gire la ruleta...');
 
+  const handleResetGame = () => {
+    resetGame();
+  };
+
+  const handleCloseRoulette = () => {
+    if (updateGameStatus) {
+      updateGameStatus({
+        isRouletteActive: false,
+        playerToStart: gameStatus.playerToStart, // Mantiene el ganador
+      });
+    } else {
+      console.error("updateGameStatus no está disponible en el contexto.");
+    }
+  };
+
   return (
     <div className={`game-started-container ${cardColorClass}`}>
 
@@ -37,6 +52,7 @@ const GameStartedScreen = () => {
       <Roulette
         players={players}
         gameStatus={gameStatus}
+        onClose={handleCloseRoulette}
       />
 
       <div className="game-info-panel">
@@ -51,19 +67,22 @@ const GameStartedScreen = () => {
       {isAdmin && (
         <div className="admin-actions-game-screen">
           <button
+            className="admin-reset-button"
+            onClick={handleResetGame}
+          >
+            Volver a Jugar
+          </button>
+          <button
             className="admin-roulette-button"
             onClick={startRoulette}
             disabled={gameStatus.isRouletteActive}
           >
             Girar Ruleta
           </button>
-
           <button
             className="admin-reset-button"
             onClick={() => {
-              if (window.confirm("¿Deseas finalizar el juego y volver al lobby?")) {
-                finishGame();
-              }
+              finishGame();
             }}
           >
             Finalizar Partida
