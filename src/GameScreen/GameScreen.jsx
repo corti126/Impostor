@@ -6,7 +6,6 @@ function GameScreen() {
   const { players, isAdmin, userName, removePlayer, finishGame, startGame } = useGame();
 
   const [gameStatus, setGameStatus] = useState('Conectando con la sala...');
-
   const minPlayers = 1;
 
   useEffect(() => {
@@ -16,7 +15,6 @@ function GameScreen() {
       setGameStatus(`Esperando a más jugadores... (${players.length}/${minPlayers})`);
     }
   }, [players.length]);
-
 
   const handleStartGame = () => {
     if (players.length >= minPlayers) {
@@ -50,22 +48,28 @@ function GameScreen() {
         <ul className="players-list">
           {players.map((player) => (
             <li key={player.id} className="player-item">
-              <span className="player-icon">👤</span> {player.name}
-
-              {isAdmin && player.name !== userName && (
-                <button
-                  className="remove-button"
-                  onClick={() => handleRemovePlayer(player.name)}
-                >
-                  X
-                </button>
-              )}
+              <div className="player-left">
+                <span className="player-icon">👤</span>
+              </div>
+              <div className="player-center">
+                {player.name}
+              </div>
+              <div className="player-right">
+                {isAdmin && player.name !== userName && (
+                  <button
+                    className="remove-button"
+                    onClick={() => handleRemovePlayer(player.name)}
+                  >
+                    X
+                  </button>
+                )}
+              </div>
             </li>
           ))}
         </ul>
       </div>
 
-      {isAdmin && (
+      {isAdmin ? (
         <div className="lobby-actions">
           <button
             className={`start-button ${players.length < minPlayers ? 'disabled' : ''}`}
@@ -81,9 +85,7 @@ function GameScreen() {
             Finalizar Sala
           </button>
         </div>
-      )}
-
-      {!isAdmin && (
+      ) : (
         <div className="lobby-actions">
           <p className="waiting-admin-message">Esperando que el administrador ("Corti") inicie el juego...</p>
         </div>

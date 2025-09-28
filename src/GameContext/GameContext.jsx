@@ -33,15 +33,52 @@ const loadLocalData = () => {
   return { name, id };
 };
 
-const distributeCards = (currentPlayers) => {
-  const shuffledCards = [...CLASH_ROYALE_CARDS]
-    .sort(() => 0.5 - Math.random())
-    .slice(0, currentPlayers.length);
+/**
+ * Asigna una única Carta Verdadera a todos los Tripulantes y una Carta Falsa
+ * (con Elixir modificado) al Impostor.
+ * @param {Array<Object>} currentPlayers - Lista de jugadores con sus IDs y nombres.
+ * @param {string} impostorName - Nombre del jugador que será el Impostor.
+ * @returns {Array<Object>} Lista de jugadores con la propiedad 'assignedCard' y 'role' asignadas.
+ */
+const assignCardsAndRoles = (currentPlayers, impostorName) => {
+  // 1. Seleccionar la Carta Verdadera ÚNICA para el debate
+  const trueCard = CLASH_ROYALE_CARDS[Math.floor(Math.random() * CLASH_ROYALE_CARDS.length)];
 
-  const updatedPlayers = currentPlayers.map((player, index) => {
+  // 2. Crear las dos versiones de la carta
+  // El Impostor miente sobre el coste de Elixir.
+  const trueElixir = trueCard.elixir;
+  const falseElixir = trueElixir === 1 ? 2 : trueElixir - 1; // Aseguramos que la mentira sea diferente al real
+
+  // Carta del Impostor (la mentira)
+  const impostorCard = {
+    ...trueCard,
+    elixir: falseElixir,
+    isLie: true,
+    // Agregamos una marca para identificarla fácilmente si es necesario
+    trueElixirCost: trueElixir
+  };
+
+  // Carta del Tripulante (la verdad)
+  const crewmateCard = {
+    ...trueCard,
+    isLie: false
+  };
+
+
+  // 3. Asignar roles y cartas
+  const updatedPlayers = currentPlayers.map((player) => {
+    const isImpostor = player.name === impostorName;
+
+    // Asignar el rol
+    const role = isImpostor ? 'IMPOSTOR' : 'CREWMATE';
+
+    // Asignar la carta basada en el rol
+    const assignedCard = isImpostor ? impostorCard : crewmateCard;
+
     return {
       ...player,
-      assignedCard: shuffledCards[index] || null,
+      role: role,
+      assignedCard: assignedCard,
     };
   });
 
@@ -168,12 +205,15 @@ export const GameProvider = ({ children }) => {
       return false;
     }
 
+    // 1. Asignar Impostor
     const impostorIndex = Math.floor(Math.random() * players.length);
     const impostorName = players[impostorIndex].name;
 
-    const playersWithCards = distributeCards(players);
+    // 2. Distribuir cartas de forma consistente y asignar roles (NUEVO)
+    const playersWithCardsAndRoles = assignCardsAndRoles(players, impostorName);
 
-    const updatedPlayersObject = playersWithCards.reduce((acc, player) => {
+    // 3. Preparar datos para la base de datos
+    const updatedPlayersObject = playersWithCardsAndRoles.reduce((acc, player) => {
       acc[player.id] = player;
       return acc;
     }, {});
@@ -303,6 +343,7 @@ export const GameProvider = ({ children }) => {
       const updates = {};
       players.forEach(player => {
         updates[`players/${player.id}/assignedCard`] = null;
+        updates[`players/${player.id}/role`] = null; // Limpiamos el rol
       });
       await update(ref(database, LOBBY_PATH), updates);
 
