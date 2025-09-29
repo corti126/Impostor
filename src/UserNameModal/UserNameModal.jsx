@@ -1,24 +1,20 @@
-// Ubicación: src/UserNameModal/UserNameModal.jsx
-
 import React, { useState } from 'react';
 import './UserNameModal.css';
 
 /**
- * Modal para que el usuario ingrese y confirme su nombre de usuario.
- * @param {boolean} isOpen - Controla la visibilidad del modal.
- * @param {function} onClose - Función para cerrar el modal sin confirmar.
- * @param {function} onConfirm - Función ASÍNCRONA que se ejecuta al confirmar.
+ * @param {boolean} isOpen - 
+ * @param {function} onClose - 
+ * @param {function} onConfirm - 
  */
 function UserNameModal({ isOpen, onClose, onConfirm }) {
   const [userName, setUserName] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Estado de carga
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!isOpen) {
     return null;
   }
 
-  const handleConfirm = async () => { // Hacemos esta función ASÍNCRONA
-    // 1. Validación
+  const handleConfirm = async () => {
     const nameToConfirm = userName.trim();
     if (nameToConfirm.length < 3) {
       alert('Por favor, ingresa un nombre de usuario de al menos 3 caracteres.');
@@ -28,18 +24,13 @@ function UserNameModal({ isOpen, onClose, onConfirm }) {
     try {
       setIsLoading(true);
       
-      // 2. Llamar a la función onConfirm del componente padre (ImpostorGame)
-      // Esta función es la que llama a joinLobby(name) de Firebase.
       await onConfirm(nameToConfirm); 
-      
-      // La limpieza y cierre del modal ahora se maneja en ImpostorGame
-      
+            
     } catch (error) {
         console.error("Error en la confirmación del nombre:", error);
         alert("Ocurrió un error inesperado al intentar unirse.");
     } finally {
         setIsLoading(false);
-        // Opcional: limpiar el input si el padre ya cerró el modal
         setUserName(''); 
     }
   };
@@ -71,7 +62,6 @@ function UserNameModal({ isOpen, onClose, onConfirm }) {
           <button 
             className="confirm-button" 
             onClick={handleConfirm}
-            // Bloqueamos el botón si no hay suficiente texto o si está cargando
             disabled={userName.trim().length < 3 || isLoading} 
           >
             {isLoading ? 'Conectando...' : 'Confirmar'}

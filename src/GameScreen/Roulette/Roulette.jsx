@@ -56,10 +56,8 @@ export const Roulette = ({ players, gameStatus, onClose }) => {
       ctx.translate(size / 2, size / 2);
       ctx.rotate(angle + currentArc / 2);
 
-      const textX = outsideRadius - 30;
 
       ctx.rotate(Math.PI / 2);
-      ctx.fillText(players[i].name, textX, 0);
 
       ctx.restore();
     }

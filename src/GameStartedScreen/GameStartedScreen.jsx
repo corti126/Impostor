@@ -30,7 +30,7 @@ const GameStartedScreen = () => {
     if (updateGameStatus) {
       updateGameStatus({
         isRouletteActive: false,
-        playerToStart: gameStatus.playerToStart, // Mantiene el ganador
+        playerToStart: gameStatus.playerToStart,
       });
     } else {
       console.error("updateGameStatus no está disponible en el contexto.");

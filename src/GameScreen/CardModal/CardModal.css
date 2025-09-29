@@ -12,10 +12,10 @@
 }
 
 .card-modal-content {
-  background: #1b1c1d; /* Usado como bgColor en JSX */
+  background: #1b1c1d;
   padding: 30px 25px;
   border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); /* Sombra más oscura */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
   width: 90%;
   max-width: 380px;
   text-align: center;
@@ -40,14 +40,6 @@
   }
 }
 
-.card-reveal-heading {
-  color: #4CAF50;
-}
-
-/* --- CLASES DE TEMA (IMPOSTOR/TRIPULANTE) --- */
-
-/* La clase .card-theme-container fue eliminada del JSX, 
-   pero dejo las clases de énfasis por si las usas en los spans. */
 .impostor-span {
   color: #FF6B6B;
 }
@@ -56,14 +48,13 @@
   color: #4CAF50;
 }
 
-/* --- TEXTOS GENERALES --- */
 
 .role-title-modal {
   font-size: 1.6em;
   font-weight: 700;
   margin-bottom: 5px;
   letter-spacing: 0.5px;
-  color: #ddd; /* Cambiado a blanco para usar el span de color */
+  color: #ddd;
 }
 
 .role-text-modal {
@@ -83,13 +74,11 @@
 .instruction-modal {
   font-size: 0.9em;
   line-height: 1.5;
-  color: #aaa; /* Color ligeramente más claro */
+  color: #aaa;
   margin-bottom: 10px;
   font-style: italic;
   padding: 0 10px;
 }
-
-/* --- BOTÓN --- */
 
 .close-modal-button {
   background-color: #6BFFB8;
@@ -110,8 +99,6 @@
   background-color: #4cd89c;
 }
 
-/* --- IMPOSTOR IMAGEN --- */
-
 .impostor-image-modal {
   width: 80%;
   max-height: 120px;
@@ -120,9 +107,6 @@
   filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
   animation: none;
 }
-
-
-/* --- CONTENEDOR DE LA CARTA (IMAGEN) --- */
 
 .card-display-container {
     display: flex;
@@ -153,8 +137,6 @@
   z-index: 1; 
 }
 
-
-/* --- LISTA DE INFORMACIÓN DE LA CARTA --- */
 
 .card-info-list {
     list-style: none;

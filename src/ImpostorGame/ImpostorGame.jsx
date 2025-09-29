@@ -1,5 +1,3 @@
-// Ubicación: src/GameScreen/ImpostorGame/ImpostorGame.jsx
-
 import React, { useState } from 'react';
 import "./ImpostorGame.css";
 import { UserNameModal } from '../UserNameModal/UserNameModal';
@@ -27,7 +25,6 @@ function ImpostorGame() {
 
     if (success) {
       console.log(`Nombre confirmado: ${name}. Redirigiendo al lobby.`);
-      // Cerramos el modal
       setIsModalOpen(false);
     }
   };
